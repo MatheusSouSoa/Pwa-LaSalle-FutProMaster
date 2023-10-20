@@ -1,10 +1,89 @@
 import { Trash2, User2 } from "lucide-react"
+import { useState } from "react"
 
-interface SubstituesProps {
-    reservas: any[]
+// interface SubstituesProps {
+//     reservas: any[]
+// }
+
+interface SubstitutesProps{
+    maxPlayers?: number
+    sectorName: string
+    players: any[] | undefined
+    isEven?: boolean
 }
 
-export default function Substitutes({reservas} : SubstituesProps) {
+interface PlayerProps {
+    nome: string
+    posicao: string
+    camisa: number
+    situacao: string
+}
+
+
+export default function Substitutes({maxPlayers, sectorName} : SubstitutesProps) {
+
+    const [playersNumber, setPlayersNumber] = useState(0)
+    const [isVisible, setIsVisible] = useState(false);
+    const [reservas, setReservas] = useState<PlayerProps[] | undefined>()
+    const [playerFormData, setPlayerFormData] = useState<PlayerProps>({
+        nome: '',
+        posicao: sectorName,
+        camisa: 0,
+        situacao: 'Titular'
+    })
+
+    function removePlayer (index: number ) {
+        console.log(index)
+
+        if(reservas)
+            setReservas(reservas.slice(0, index)
+            .concat(reservas.slice(index + 1)));
+    }
+    
+
+    function handleAddPlayer() {
+
+        if(reservas && maxPlayers && reservas?.length >= maxPlayers) 
+            return console.log("O numero de jogadores maximo para posição foi atingido.")
+
+        if (playerFormData.nome === '') {
+            console.log('Nome não pode estar em branco');
+            return;
+        }
+        if (playerFormData.camisa === 0) {
+            console.log('Camisa não pode estar em branco ou 0');
+            return;
+        }
+    
+        console.log(playerFormData)
+        setReservas((prevPlayers) => {
+        if (prevPlayers) {
+            return [...prevPlayers, playerFormData];
+        } else {
+            return [playerFormData];
+        }
+        });
+    
+        setPlayerFormData({
+        ...playerFormData,
+        nome: '',
+        camisa: 0,
+        });
+
+        setPlayersNumber(playersNumber + 1)
+        console.log(reservas)
+        setIsVisible(!isVisible);
+    }
+        
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+    
+        setPlayerFormData({
+          ...playerFormData,
+          [name]: value
+        });
+    };
+
     return (
         <div className="p-2 bg-green-500 text-white font-semibold border border-white flex gap-6 overflow-x-auto">
                     {reservas ? reservas.map((player, index) => (

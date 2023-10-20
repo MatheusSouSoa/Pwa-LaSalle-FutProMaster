@@ -1,12 +1,12 @@
 import './App.css'
-import Home from './components/home/Home'
+import CreateTeamPage from './components/createTeamPage/CreatTeamPage'
 
 function App() {
 
   return (
     <>
       <div className='w-screen'>
-        <Home/>
+        <CreateTeamPage/>
       </div>
     </>
   )
