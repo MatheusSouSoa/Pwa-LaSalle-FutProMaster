@@ -4,7 +4,7 @@ import { useState } from "react"
 interface SectorPLayersProps{
     maxPlayers?: number
     sectorName: string
-    players: any[] | undefined
+    players: object[] | undefined
     isEven?: boolean
 }
 
@@ -97,7 +97,9 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
     return (
         <div className="flex flex-col w-1/4 h-full text-xs md:text-lg select-none">
             <div className="flex justify-around items-center p-3 bg-green-400 font-bold text-white ">
-                {sectorName}
+                <span className=" whitespace-nowrap">
+                    {sectorName}
+                </span>
                 <div className={`
                     ${playerOfPosition 
                         && maxPlayers && 

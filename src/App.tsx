@@ -1,14 +1,13 @@
 import './App.css'
-import CreateTeamPage from './components/createTeamPage/CreatTeamPage'
+import Router from './Router'
+import { BrowserRouter } from 'react-router-dom'
 
 function App() {
 
   return (
-    <>
-      <div className='w-screen'>
-        <CreateTeamPage/>
-      </div>
-    </>
+    <BrowserRouter>
+      <Router/>
+    </BrowserRouter>
   )
 }
 

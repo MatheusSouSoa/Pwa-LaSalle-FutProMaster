@@ -116,7 +116,7 @@ export default function CreateTeam() {
         },
     ]
 
-    const reservas = players.filter((player) => player.situcao.toLocaleLowerCase() !== "titular")
+    // const reservas = players.filter((player) => player.situcao.toLocaleLowerCase() !== "titular")
 
     return (
         <div className="bg-gray-300 w-full h-screen screenCalc flex p-3 text-sm md:text-xl">
@@ -125,12 +125,12 @@ export default function CreateTeam() {
                     <CreateTeamInfo/>
                 </div>
                 <div className="flex bg-green-500 h-full overflow-hidden">
-                    <SectorPlayers sectorName="Goleiro" players={players} maxPlayers={1}/>
-                    <SectorPlayers sectorName="Defesa" isEven players={players} maxPlayers={5}/>
-                    <SectorPlayers sectorName="Meio-Campo" players={players} maxPlayers={5}/>
-                    <SectorPlayers sectorName="Ataque" isEven players={players} maxPlayers={4}/>
+                    <SectorPlayers sectorName="GOL" players={players} maxPlayers={1}/>
+                    <SectorPlayers sectorName="DEF" isEven players={players} maxPlayers={5}/>
+                    <SectorPlayers sectorName="MC" players={players} maxPlayers={5}/>
+                    <SectorPlayers sectorName="ATA" isEven players={players} maxPlayers={4}/>
                 </div>
-                <Substitutes reservas={reservas}/>
+                <Substitutes sectorName="Reservas" maxPlayers={7}/>
             </div>
         </div>
     )

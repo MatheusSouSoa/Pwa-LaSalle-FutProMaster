@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom"
 
-export default function HomeContent() {
+export default function RegisterContent() {
 
     // const [players, setPlayers] = useState<any[]>()
     
@@ -12,11 +12,11 @@ export default function HomeContent() {
             <div className="flex-1 flex-col gap-3 flex items-center justify-center ">
                 <div className="flex-col gap-3 flex items-center justify-center ">
                     <div className="flex flex-col">
-                        <span className="font-bold text-3xl">Boas-vindas ao Pelatola</span>
+                        <span className="font-bold text-3xl">Crie uma conta agora no Pelatola</span>
                     </div>
                     <div className="w-full">
                         <span>Login:</span>
-                        <input type="text" placeholder="login com email"
+                        <input type="text" placeholder="Email"
                         className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                         />
                     </div>
@@ -27,12 +27,18 @@ export default function HomeContent() {
                         />
                     </div>
                     <div className="w-full">
-                        <input type="button" value={"Login"} placeholder="insira sua senha aqui"
+                        <span>Repita sua senha:</span>
+                        <input type="password" placeholder="Repita sua senha aqui"
+                        className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
+                        />
+                    </div>
+                    <div className="w-full">
+                        <input type="button" value={"Criar conta"} placeholder="insira sua senha aqui"
                         className="outline-none border-1 bg-blue-500 hover:bg-blue-400 px-2 rounded-lg w-full text-white font-black cursor-pointer py-1"
                         />
                     </div>
-                    <NavLink to="/register" className="">
-                        <input type="button" value={"Criar conta"}
+                    <NavLink to="/" className="">
+                        <input type="button" value={"Entrar"}
                         className="outline-none border-1 hover:underline  rounded-lg text-black font-normal cursor-pointer py-1"
                         />
                     </NavLink>
