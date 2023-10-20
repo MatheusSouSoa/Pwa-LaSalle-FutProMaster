@@ -85,7 +85,6 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
         setIsVisible(!isVisible);
     }
         
-    console.log(playerOfPosition)
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
     

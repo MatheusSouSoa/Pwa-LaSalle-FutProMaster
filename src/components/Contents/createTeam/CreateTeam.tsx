@@ -1,7 +1,8 @@
+import CreateTeamInfo from "../../createTeamInfos/CreateTeamInfos";
 import SectorPlayers from "../../sector_players/SectorPlayers";
 import Substitutes from "../../substitutes/Substitutes";
 
-export default function HomeContent() {
+export default function CreateTeam() {
 
     // const [players, setPlayers] = useState<any[]>()
     const players = [
@@ -119,7 +120,18 @@ export default function HomeContent() {
 
     return (
         <div className="bg-gray-300 w-full h-screen screenCalc flex p-3 text-sm md:text-xl">
-            homecontent
+            <div className="flex flex-col w-full rounded-2xl overflow-hidden">
+                <div className="bg-white p-2">
+                    <CreateTeamInfo/>
+                </div>
+                <div className="flex bg-green-500 h-full overflow-hidden">
+                    <SectorPlayers sectorName="Goleiro" players={players} maxPlayers={1}/>
+                    <SectorPlayers sectorName="Defesa" isEven players={players} maxPlayers={5}/>
+                    <SectorPlayers sectorName="Meio-Campo" players={players} maxPlayers={5}/>
+                    <SectorPlayers sectorName="Ataque" isEven players={players} maxPlayers={4}/>
+                </div>
+                <Substitutes reservas={reservas}/>
+            </div>
         </div>
     )
 }
