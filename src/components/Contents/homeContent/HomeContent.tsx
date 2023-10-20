@@ -12,22 +12,22 @@ export default function HomeContent() {
             <div className="flex-1 flex-col gap-3 flex items-center justify-center ">
                 <div className="flex-col gap-3 flex items-center justify-center ">
                     <div className="flex flex-col">
-                        <span className="font-bold text-3xl">Boas-vindas ao Pelatola</span>
+                        <span className="font-bold text-3xl">Seja bem-vindo ao FutProMaster</span>
                     </div>
                     <div className="w-full">
                         <span>Login:</span>
-                        <input type="text" placeholder="login com email"
+                        <input type="email" placeholder="login com email" required
                         className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                         />
                     </div>
                     <div className="w-full">
                         <span>Senha:</span>
-                        <input type="password" placeholder="insira sua senha aqui"
+                        <input type="password" placeholder="insira sua senha aqui" required
                         className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                         />
                     </div>
                     <div className="w-full">
-                        <input type="button" value={"Login"} placeholder="insira sua senha aqui"
+                        <input type="submit" value={"Login"} 
                         className="outline-none border-1 bg-blue-500 hover:bg-blue-400 px-2 rounded-lg w-full text-white font-black cursor-pointer py-1"
                         />
                     </div>

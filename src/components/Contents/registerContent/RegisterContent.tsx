@@ -12,28 +12,28 @@ export default function RegisterContent() {
             <div className="flex-1 flex-col gap-3 flex items-center justify-center ">
                 <div className="flex-col gap-3 flex items-center justify-center ">
                     <div className="flex flex-col">
-                        <span className="font-bold text-3xl">Crie uma conta agora no Pelatola</span>
+                        <span className="font-bold text-3xl">Crie uma conta agora no FutProMaster</span>
                     </div>
                     <div className="w-full">
                         <span>Login:</span>
-                        <input type="text" placeholder="Email"
+                        <input type="email" placeholder="Email" required
                         className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                         />
                     </div>
                     <div className="w-full">
                         <span>Senha:</span>
-                        <input type="password" placeholder="insira sua senha aqui"
+                        <input type="password" placeholder="insira sua senha aqui" required
                         className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                         />
                     </div>
                     <div className="w-full">
                         <span>Repita sua senha:</span>
-                        <input type="password" placeholder="Repita sua senha aqui"
+                        <input type="password" placeholder="Repita sua senha aqui" required
                         className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-full border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                         />
                     </div>
                     <div className="w-full">
-                        <input type="button" value={"Criar conta"} placeholder="insira sua senha aqui"
+                        <input type="submit" value={"Criar conta"} placeholder="insira sua senha aqui"
                         className="outline-none border-1 bg-blue-500 hover:bg-blue-400 px-2 rounded-lg w-full text-white font-black cursor-pointer py-1"
                         />
                     </div>
