@@ -1,6 +1,9 @@
 import { format } from "date-fns";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, X } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../../../utils/modal/Modal";
+import { useMatches } from "../../../hooks/matchesProvider/MatchesProvider";
 
 interface PartidaProps {
     data: Date,
@@ -16,6 +19,25 @@ interface PartidaProps {
 }
 
 export default function MatchesContent() {
+
+    const times = [
+        {
+          nome: "Flamengo",
+          jogadores: [
+            { nome: 'Jogador 1', camisa: 10, situacao: 'titular', posicao: 'ATA' },
+            { nome: 'Jogador 2', camisa: 5, situacao: 'reserva', posicao: 'DEF' },
+          ]
+        },
+        {
+          nome: "Corinthians",
+          jogadores: []
+        },
+        {
+          nome: "São Paulo",
+          jogadores: []
+        },
+        // Você pode adicionar mais times aqui
+    ];
 
     const partidas:PartidaProps[] = [
         {
@@ -93,10 +115,28 @@ export default function MatchesContent() {
     ]
 
     const navigate = useNavigate();
+    const {handleMinutes, minutos, handleTeamA, handleTeamB} = useMatches()
+    const [timeA, setTimeA] = useState(times[0].nome)
+    const [timeB, setTimeB] = useState(times[1].nome)
 
     const redirecionarParaOutraPagina = () => {
+        const teamA = times.find((time) => time.nome.includes(timeA)) || null
+        const teamB = times.find((time) => time.nome.includes(timeB)) || null
+        handleTeamB(teamB)
+        handleTeamA(teamA)
         navigate('/matches/create-match');
     }
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOpenModal = () => {
+        handleMinutes(0)
+        setIsModalOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsModalOpen(false);
+    };
 
     return (
         <div className="bg-zinc-300 w-full h-screen screenCalc flex p-3 text-sm md:text-xl">
@@ -105,9 +145,59 @@ export default function MatchesContent() {
                     <div className="font-semibold ">
                         Historico de jogos
                     </div>
-                    <div className="bg-green-400 text-white rounded-full p-2 hover:bg-green-600 cursor-pointer">
-                        <PlusIcon onClick={redirecionarParaOutraPagina}/>
+                    <div onClick={handleOpenModal} className="bg-green-400 text-white rounded-full p-2 hover:bg-green-600 cursor-pointer">
+                        <PlusIcon />
                     </div>
+                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                        <div>
+                            <div className="flex justify-end pb-3">
+                                <X className="text-red-500" onClick={handleCloseModal}/>
+                            </div>
+                            <div className="flex justify-center items-center flex-col gap-6 text-3xl">
+                                <div className="flex flex-col gap-5  items-center justify-center ">
+                                    <select 
+                                        className="outline-none border rounded-md"
+                                        name="" 
+                                        id=""
+                                        value={timeA}
+                                        onChange={(event) => setTimeA(event.target.value)}
+                                    >
+                                        {times.map((time, index) => (
+                                            <option key={index} value={time.nome}>{time.nome}</option>
+                                        ))}
+                                    </select>
+                                    X
+                                    <select 
+                                        className="outline-none border rounded-md"
+                                        name="" 
+                                        id=""
+                                        value={timeB}
+                                        onChange={(event) => setTimeB(event.target.value)}
+                                    >
+                                        {times.map((time, index) => (
+                                            <option key={index} value={time.nome}>{time.nome}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex">
+                                    <span className="pr-2">Minutos:</span>
+                                    <input 
+                                        type="number" 
+                                        placeholder="minutos a serem jogados" 
+                                        required
+                                        className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-12 border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
+                                        value={minutos}
+                                        onChange={(event) => handleMinutes(parseInt(event.target.value))}
+                                    />
+                                </div>
+                                <div>
+                                    <button onClick={redirecionarParaOutraPagina} className="bg-green-500 hover:bg-green-400 px-4 py-2 rounded-md font-black text-white">
+                                        Confirmar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </Modal>
                 </div>
                 <div className="bg-zinc-200 h-full p-5 flex flex-col gap-5 overflow-y-auto">
                     {partidas.map((partida, index) => (

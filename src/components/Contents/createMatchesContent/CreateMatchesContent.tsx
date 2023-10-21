@@ -3,7 +3,6 @@ import Cronometro from "../../cronometro/Cronometro";
 import { format } from "date-fns";
 import { useState } from "react";
 import { useMatches } from "../../../hooks/matchesProvider/MatchesProvider";
-
 interface PartidaProps {
     data: Date,
     minutos: number,
@@ -49,24 +48,24 @@ export default function CreateMatchesContent() {
         setAwayGoal(awayGoal + value)
     }
 
-    const times = [
-        {
-          nome: "Flamengo",
-          placar: 3,
-          jogadores: []
-        },
-        {
-          nome: "Corinthians",
-          placar: 0,
-          jogadores: []
-        },
-        {
-          nome: "São Paulo",
-          placar: 1,
-          jogadores: []
-        },
-        // Você pode adicionar mais times aqui
-    ];
+    // const times = [
+    //     {
+    //       nome: "Flamengo",
+    //       placar: 3,
+    //       jogadores: []
+    //     },
+    //     {
+    //       nome: "Corinthians",
+    //       placar: 0,
+    //       jogadores: []
+    //     },
+    //     {
+    //       nome: "São Paulo",
+    //       placar: 1,
+    //       jogadores: []
+    //     },
+    //     // Você pode adicionar mais times aqui
+    // ];
 
     const partida: PartidaProps = {
         data: new Date(Date.now()),
@@ -80,48 +79,16 @@ export default function CreateMatchesContent() {
             placar: 0
         }
     }
-      
 
+    const{timeA, timeB} = useMatches()
     return (
         <div className="bg-zinc-200 w-full h-screen screenCalc flex p-3 text-sm md:text-xl">
             <div className="flex flex-col w-full rounded-lg overflow-hidden ">
                 <div className="bg-green-500 flex justify-between items-center p-5 border border-b-black">
                     <div className="font-semibold text-white">
-                        Criar partida
+                        PARTIDA
                     </div>
-                    <div>
-                        <select 
-                            className="outline-none border rounded-md"
-                            name="" 
-                            id=""
-                        >
-                            {times.map((time, index) => (
-                                <option key={index} value={time.nome}>{time.nome}</option>
-                            ))}
-                        </select>
-                        X
-                        <select 
-                            className="outline-none border rounded-md"
-                            name="" 
-                            id=""
-                        >
-                            {times.map((time, index) => (
-                                <option key={index} value={time.nome}>{time.nome}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="flex">
-                        <span className="pr-2">Minutos:</span>
-                        <input 
-                            type="number" 
-                            placeholder="minutos a serem jogados" 
-                            required
-                            className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-12 border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
-                            value={minutos}
-                            onChange={(event) => handleMinutes(parseInt(event.target.value))}
-                        />
-                    </div>
-
+                    {/*  */}
                 </div>
                 <div className="bg-white h-full p-2 flex flex-col gap-5 justify-center items-center w-full overflow-y-auto">
                     <Cronometro redirecionar={redirecionarParaOutraPagina} handleAwayGoal={handleAwayGoal} handleHomeGoal={handleHomeGoal}/>
@@ -145,7 +112,7 @@ export default function CreateMatchesContent() {
                                 <div className="flex justify-between items-center w-full flex-1 ">
                                     <div className="w-full flex flex-col justify-between items-center p-2 text-xl sm:text-2xl md:text-4xl lg:text-5xl ">
                                         <div className=" flex-1">
-                                            {partida.timeA.nome}
+                                            {timeA && timeA.nome}
                                         </div>
                                         <div className="text-7xl ">
                                             {homeGoal}
@@ -156,7 +123,7 @@ export default function CreateMatchesContent() {
                                     </div>
                                     <div className="w-full flex flex-col justify-between items-center p-2 text-xl sm:text-2xl md:text-5xl ">
                                         <div className=" flex-1">
-                                            {partida.timeB.nome}
+                                            {timeB && timeB.nome}
                                         </div>
                                         <div className="text-7xl  h-full">
                                             {awayGoal}

@@ -6,32 +6,36 @@ interface MatchesProviderProps {
     children: ReactNode
 }
 
+interface Time {
+    nome: string;
+    jogadores: unknown[];
+}
+
 interface MatchesProps {
-    // data: Date,
-    minutos: number,
-    timeA: object | null,
-    timeB: object | null,
-    handleMinutes: (minutes: number) => void
-    handleTeamA: (team: object) => void
-    handleTeamB: (team: object) => void
+    minutos: number;
+    timeA: Time | null;
+    timeB: Time | null;
+    handleMinutes: (minutes: number) => void;
+    handleTeamA: (time: Time | null) => void;
+    handleTeamB: (time: Time | null) => void;
 }
 
 export default function MatchesProvider({children}: MatchesProviderProps){
 
     const [minutos, setMinutos] = useState(0)
-    const [timeA, setTimeA] = useState<object | null>(null)
-    const [timeB, setTimeB] = useState<object | null>(null)
+    const [timeA, setTimeA] = useState<Time | null>(null)
+    const [timeB, setTimeB] = useState<Time | null>(null)
 
     function handleMinutes(value: number) {
         setMinutos(value)
     }
 
-    function handleTeamA (teamA: object) {
-        setTimeA(teamA)
+    function handleTeamA (time: Time | null) {
+        setTimeA(time)
     }
 
-    function handleTeamB (teamB: object) {
-        setTimeB(teamB)
+    function handleTeamB (time:Time | null) {
+        setTimeB(time)
     }
 
 
