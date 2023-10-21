@@ -151,7 +151,7 @@ export default function MatchesContent() {
                     <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                         <div>
                             <div className="flex justify-end pb-3">
-                                <X className="text-red-500" onClick={handleCloseModal}/>
+                                <X className="text-red-500 cursor-pointer" onClick={handleCloseModal}/>
                             </div>
                             <div className="flex justify-center items-center flex-col gap-6 text-3xl">
                                 <div className="flex flex-col gap-5  items-center justify-center ">
@@ -213,7 +213,7 @@ export default function MatchesContent() {
                                 </div>
                                 <div className="flex gap-3 px-2">
                                     <span>Minutos jogados:</span>
-                                    <span>{partida.minutos}</span>
+                                    <span>{minutos}</span>
                                 </div>
                             </div>
                             <div className="w-full flex justify-between items-center p-2 text-xl sm:text-2xl md:text-4xl lg:text-5xl ">

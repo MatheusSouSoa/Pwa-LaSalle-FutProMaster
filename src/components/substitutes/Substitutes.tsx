@@ -33,8 +33,6 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
         situacao: 'Reserva'
     })
 
-    console.log(positionSelected)
-
     const toggleVisibility = () => {
         if(reservas && maxPlayers && reservas?.length >= maxPlayers) return 
         setIsVisible(!isVisible);

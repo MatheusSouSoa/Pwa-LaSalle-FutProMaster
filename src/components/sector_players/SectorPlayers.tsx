@@ -1,10 +1,11 @@
 import { Trash2, User2, UserPlus } from "lucide-react"
 import { useState } from "react"
+import { usePlayersStore } from "../../stores/playersStore"
 
 interface SectorPLayersProps{
     maxPlayers?: number
     sectorName: string
-    players: object[] | undefined
+    players?: object[] | undefined
     isEven?: boolean
 }
 
@@ -42,14 +43,19 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
     //             player.situcao.toLowerCase() == "titular"
     // })
 
+    const handleRemovePlayersStore = usePlayersStore(state => state.removePlayer)
+    
     function removePlayer (index: number ) {
-        console.log(index)
-
+        const player = players[index];
         if(playerOfPosition)
             setPlayersOfPosition(playerOfPosition.slice(0, index)
             .concat(playerOfPosition.slice(index + 1)));
+        else return
+        handleRemovePlayersStore(player.camisa)
     }
     
+    const handleAddPlayersStore = usePlayersStore(state => state.addPlayer)
+    const players = usePlayersStore(state => state.players)
 
     function handleAddPlayer() {
 
@@ -65,7 +71,6 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
             return;
         }
     
-        console.log(playerFormData)
         setPlayersOfPosition((prevPlayers) => {
         if (prevPlayers) {
             return [...prevPlayers, playerFormData];
@@ -73,6 +78,7 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
             return [playerFormData];
         }
         });
+        handleAddPlayersStore(playerFormData)
     
         setPlayerFormData({
         ...playerFormData,
@@ -81,7 +87,6 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
         });
 
         setPlayersNumber(playersNumber + 1)
-        console.log(playerOfPosition)
         setIsVisible(!isVisible);
     }
         

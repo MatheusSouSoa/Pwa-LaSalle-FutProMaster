@@ -8,7 +8,7 @@ export default function Header() {
   
 
     return (
-        <div className="flex justify-between items-center w-full bg-green-600 p-4 px-8  h-20">
+        <div className="flex justify-between items-center w-full bg-green-600 p-4 px-2 md:px-8  h-20">
             <Logo/>
             {shouldRenderUserInfo && <MenuUser />}
         </div>

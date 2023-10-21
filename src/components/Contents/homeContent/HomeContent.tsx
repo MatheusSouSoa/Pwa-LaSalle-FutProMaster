@@ -1,14 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom"
+import {AuthService} from "../../../services/AuthService";
+
 
 export default function HomeContent() {
 
     const navigate = useNavigate();
 
-    const redirecionarParaOutraPagina = () => {
+    async function handleGoogleLogin() {
+        await AuthService()
         navigate('/matches');
     }
-
-    
     // const [players, setPlayers] = useState<any[]>()
     
     return (
@@ -35,7 +36,7 @@ export default function HomeContent() {
                         />
                     </div>
                     <div className="w-full">
-                        <input type="submit" value={"Entrar"} onClick={redirecionarParaOutraPagina}
+                        <input type="submit" value={"Entrar"} 
                         className="outline-none border-1 bg-blue-500 hover:bg-blue-400 px-2 rounded-lg w-full text-white font-black cursor-pointer py-1"
                         />
                     </div>
@@ -56,12 +57,14 @@ export default function HomeContent() {
                         </div>
                     </div>
                     <div className="w-full flex items-center border bg-zinc-100 text-zinc-400 hover:bg-zinc-400 hover:text-white px-2 rounded-lg cursor-pointer">
-                        <input type="button" value={"Login com o google"} placeholder="insira sua senha aqui"
-                        className="outline-none border-1  w-full font-black cursor-pointer py-1"
-                        />
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/800px-Google_%22G%22_Logo.svg.png" alt=""
-                        className="h-7"
-                        />
+                        <button type="button" onClick={handleGoogleLogin}
+                        className="outline-none border-1  w-full font-black cursor-pointer py-1 flex justify-center items-center gap-4"
+                        >
+                            Login com o Google
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/800px-Google_%22G%22_Logo.svg.png" alt=""
+                            className="h-7"
+                            />
+                        </button>
                     </div>
                 </div>
             </div>
