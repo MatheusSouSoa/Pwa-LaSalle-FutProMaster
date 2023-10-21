@@ -1,5 +1,5 @@
-import RegisterContent from "../Contents/registerContent/RegisterContent";
-import Header from "../header/Header";
+import RegisterContent from "../../components/Contents/registerContent/RegisterContent";
+import Header from "../../components/header/Header";
 
 export default function Register() {
 

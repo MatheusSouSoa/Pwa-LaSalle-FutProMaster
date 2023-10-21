@@ -6,13 +6,14 @@ export default function RegisterContent() {
     
     return (
         <div className="bg-white w-full h-screen screenCalc flex flex-col md:flex-row p-3 text-sm md:text-xl">
-            <div className="flex-1 hidden md:block">
+            <div className="flex-1 hidden md:block justify-center items-center">
                 <img src="https://img.freepik.com/vetores-premium/teenage-football-players-from-different-teams-kick-a-soccer-ball-football-competition-cartoon-vector_449384-546.jpg"/>
             </div>
             <div className="flex-1 flex-col gap-3 flex items-center justify-center ">
                 <div className="flex-col gap-3 flex items-center justify-center ">
                     <div className="flex flex-col">
                         <span className="font-bold text-3xl">Crie uma conta agora no FutProMaster</span>
+                        
                     </div>
                     <div className="w-full">
                         <span>Login:</span>

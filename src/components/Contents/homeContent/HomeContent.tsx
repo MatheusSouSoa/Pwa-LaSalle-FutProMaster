@@ -1,7 +1,14 @@
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 
 export default function HomeContent() {
 
+    const navigate = useNavigate();
+
+    const redirecionarParaOutraPagina = () => {
+        navigate('/matches');
+    }
+
+    
     // const [players, setPlayers] = useState<any[]>()
     
     return (
@@ -13,6 +20,7 @@ export default function HomeContent() {
                 <div className="flex-col gap-3 flex items-center justify-center ">
                     <div className="flex flex-col">
                         <span className="font-bold text-3xl">Seja bem-vindo ao FutProMaster</span>
+                        <span className="font-normal text-2xl">Domine o Jogo! Gerencie Partidas, Times e Jogadores com Facilidade</span>
                     </div>
                     <div className="w-full">
                         <span>Login:</span>
@@ -27,7 +35,7 @@ export default function HomeContent() {
                         />
                     </div>
                     <div className="w-full">
-                        <input type="submit" value={"Login"} 
+                        <input type="submit" value={"Entrar"} onClick={redirecionarParaOutraPagina}
                         className="outline-none border-1 bg-blue-500 hover:bg-blue-400 px-2 rounded-lg w-full text-white font-black cursor-pointer py-1"
                         />
                     </div>

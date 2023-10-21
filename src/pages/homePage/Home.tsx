@@ -1,5 +1,5 @@
-import HomeContent from "../Contents/homeContent/HomeContent";
-import Header from "../header/Header";
+import HomeContent from "../../components/Contents/homeContent/HomeContent";
+import Header from "../../components/header/Header";
 
 export default function Home() {
 
