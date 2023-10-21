@@ -1,12 +1,12 @@
-const registrarProfessor = (nome: string, email:string, senha:string) => {
+// const registrarProfessor = (nome: string, email:string, senha:string) => {
     
-}
+// }
 
-const registrarAluno = () => {
+// const registrarAluno = () => {
 
-}
+// }
 
-export {
-    registrarProfessor,
-    registrarAluno
-}
+// export {
+//     registrarProfessor,
+//     registrarAluno
+// }
