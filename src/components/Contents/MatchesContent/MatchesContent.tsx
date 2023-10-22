@@ -1,9 +1,12 @@
 import { format } from "date-fns";
 import { PlusIcon, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../../utils/modal/Modal";
 import { useMatches } from "../../../hooks/matchesProvider/MatchesProvider";
+import { getTeams } from "../../../services/RegisterTeam";
+import { useUsersStore } from "../../../stores/userStore";
+import { useMatchesStore } from "../../../stores/matchesStore";
 
 interface PartidaProps {
     data: Date,
@@ -18,26 +21,40 @@ interface PartidaProps {
     }
 }
 
+interface PlayerProps {
+    nome: string
+    posicao: string
+    camisa: number
+    situacao: string
+}
+
+interface TimeProps {
+    nome: string,
+    players: PlayerProps[]
+}
+
+
+
 export default function MatchesContent() {
 
-    const times = [
-        {
-          nome: "Flamengo",
-          jogadores: [
-            { nome: 'Jogador 1', camisa: 10, situacao: 'titular', posicao: 'ATA' },
-            { nome: 'Jogador 2', camisa: 5, situacao: 'reserva', posicao: 'DEF' },
-          ]
-        },
-        {
-          nome: "Corinthians",
-          jogadores: []
-        },
-        {
-          nome: "São Paulo",
-          jogadores: []
-        },
-        // Você pode adicionar mais times aqui
-    ];
+    // const times = [
+    //     {
+    //       nome: "Flamengo",
+    //       jogadores: [
+    //         { nome: 'Jogador 1', camisa: 10, situacao: 'titular', posicao: 'ATA' },
+    //         { nome: 'Jogador 2', camisa: 5, situacao: 'reserva', posicao: 'DEF' },
+    //       ]
+    //     },
+    //     {
+    //       nome: "Corinthians",
+    //       jogadores: []
+    //     },
+    //     {
+    //       nome: "São Paulo",
+    //       jogadores: []
+    //     },
+    //     // Você pode adicionar mais times aqui
+    // ];
 
     const partidas:PartidaProps[] = [
         {
@@ -115,16 +132,60 @@ export default function MatchesContent() {
     ]
 
     const navigate = useNavigate();
-    const {handleMinutes, minutos, handleTeamA, handleTeamB} = useMatches()
-    const [timeA, setTimeA] = useState(times[0].nome)
-    const [timeB, setTimeB] = useState(times[1].nome)
+    const {handleMinutes} = useMatches()
+    const [timeA, setTimeA] = useState<string>("Selecione um time")
+    const [timeB, setTimeB] = useState<string>("Selecione um time")
+    const [times, setTimes] = useState<string[]>([])
+    const[timeObj, setTimeObj] = useState<TimeProps[]>([])
+    const [ minutos, setMinutos] = useState(0)
+    const match = useMatchesStore(state => state.adicionarTimes)
+
+    
+    const user = useUsersStore(state => state.user)
+
+    useEffect(() =>{
+        async function fetchTeams () {
+            if(user){
+                getTeams(user.uid).then((data: []) => {
+                    if (data) {
+                        setTimeObj(Object.values(data))
+                        setTimes(Object.values(data).map((time: TimeProps) => {
+                            return time.nome
+                        }))
+                    } 
+                });   
+            }
+        }
+        fetchTeams()
+    }, [])
+ 
 
     const redirecionarParaOutraPagina = () => {
-        const teamA = times.find((time) => time.nome.includes(timeA)) || null
-        const teamB = times.find((time) => time.nome.includes(timeB)) || null
-        handleTeamB(teamB)
-        handleTeamA(teamA)
-        navigate('/matches/create-match');
+        if (!timeA || !timeB) {
+            return;
+        }
+
+        console.log(timeA, timeB, timeObj)
+        const teamA = timeObj.find((time) => time.nome.includes(timeA));
+        const teamB = timeObj.find((time) => time.nome.includes(timeB));
+        if(teamA && teamB){
+            console.log(teamA, teamB)
+        }
+        
+        if (teamA && teamB) {
+            // handleTeamA(teamA);
+            // handleTeamB(teamB);
+            const partida = {
+                minutos: minutos,
+                timeA: teamA,
+                timeB: teamB,
+                data: new Date()
+            }
+            match(partida)
+            navigate("/matches/create-match");
+        } else {
+            console.error("Time não encontrado");
+        }
     }
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -137,6 +198,7 @@ export default function MatchesContent() {
     const handleCloseModal = () => {
       setIsModalOpen(false);
     };
+
 
     return (
         <div className="bg-zinc-300 w-full h-screen screenCalc flex p-3 text-sm md:text-xl">
@@ -162,8 +224,9 @@ export default function MatchesContent() {
                                         value={timeA}
                                         onChange={(event) => setTimeA(event.target.value)}
                                     >
-                                        {times.map((time, index) => (
-                                            <option key={index} value={time.nome}>{time.nome}</option>
+                                        <option value="">Selecione um time</option>
+                                        {times && times.map((time, index) => (
+                                            <option key={index} value={time}>{time}</option>
                                         ))}
                                     </select>
                                     X
@@ -172,10 +235,13 @@ export default function MatchesContent() {
                                         name="" 
                                         id=""
                                         value={timeB}
-                                        onChange={(event) => setTimeB(event.target.value)}
-                                    >
-                                        {times.map((time, index) => (
-                                            <option key={index} value={time.nome}>{time.nome}</option>
+                                        onChange={(event) => {
+                                            return setTimeB(event.target.value)}
+                                        }
+                                        >
+                                        <option value="">Selecione um time</option>
+                                        {times && times.map((time, index) => (
+                                            <option key={index} value={time}>{time}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -185,9 +251,9 @@ export default function MatchesContent() {
                                         type="number" 
                                         placeholder="minutos a serem jogados" 
                                         required
-                                        className="outline-none border-1 bg-zinc-100 px-2 rounded-md w-12 border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
+                                        className=" outline-none border-1 bg-zinc-100 px-2 rounded-md w-12 border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                                         value={minutos}
-                                        onChange={(event) => handleMinutes(parseInt(event.target.value))}
+                                        onChange={(event) => setMinutos(parseInt(event.target.value))}
                                     />
                                 </div>
                                 <div>

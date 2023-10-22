@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import MatchesContent from "../../components/Contents/MatchesContent/MatchesContent";
 import Header from "../../components/header/Header";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -10,9 +10,9 @@ import { getUserData } from "../../services/AuthService";
 
 export default function MacthesPage() {
     const navigate = useNavigate();
-    const [isAuth, setIsAuth] = useState(false)
 
     const handleUserLoginStore = useUsersStore(state => state.loginUser)
+    const user = useUsersStore(state => state.user)
 
     useEffect(() => {
         onAuthStateChanged(auth, async (usuario) => {
@@ -22,11 +22,10 @@ export default function MacthesPage() {
             } 
             const user = await getUserData(usuario.uid)
             handleUserLoginStore(user)
-            setIsAuth(true)
         })
     }, [])
 
-    if(!isAuth) return null
+    if(!user) return null
     
     return (
         <div className=" bg-zinc-200 ">

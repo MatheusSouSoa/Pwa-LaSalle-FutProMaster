@@ -1,7 +1,7 @@
 import { ClockClockwise, SoccerBall } from '@phosphor-icons/react';
 import { Clock, Flag, Pause, Play, XCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useMatches } from '../../hooks/matchesProvider/MatchesProvider';
+import { useMatchesStore } from '../../stores/matchesStore';
 
 interface CronometroProps {
     redirecionar: () => void
@@ -11,12 +11,12 @@ interface CronometroProps {
 
 function Cronometro({ redirecionar, handleAwayGoal, handleHomeGoal}: CronometroProps) {
   
-  const {minutos} = useMatches()
+  const partida = useMatchesStore(state => state.matche)
   const [tempoTotal, setTempoTotal] = useState(0);
-  const [tempoLimite, setTempoLimite] = useState(minutos); // Defina seu limite de tempo em minutos
+  const [tempoLimite, setTempoLimite] = useState<number>(partida?.minutos || 0);
   const [progresso, setProgresso] = useState(0);
   const [cronometroAtivo, setCronometroAtivo] = useState(false);
-  const segundosLimite = tempoLimite * 60;
+  const segundosLimite = tempoLimite! * 60 || 0;
   const [lastGoal, setLastGoal] = useState<string | undefined>()
 
 
@@ -97,7 +97,6 @@ function Cronometro({ redirecionar, handleAwayGoal, handleHomeGoal}: CronometroP
           </div>
           <div className="text-right text-lg font-semibold inline-block text-green-600">
             <p>Resta {minutosRestantes} min {segundosRestantes} seg</p>
-            {/* <p>de {tempoLimite} minutos</p> */}
           </div>
         </div>
         <div className="flex mb-2 items-center justify-between">
