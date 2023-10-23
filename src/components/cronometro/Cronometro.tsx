@@ -23,6 +23,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
   const [cronometroAtivo, setCronometroAtivo] = useState(false);
   const segundosLimite = tempoLimite! * 60 || 0;
   const [lastGoal, setLastGoal] = useState<string | undefined>()
+  const [notification, sendNotification] = useState(true)
 
   const navigate = useNavigate()
 
@@ -53,12 +54,14 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
 
   }
 
+  
   const reiniciarCronometro = () => {
     setCronometroAtivo(false);
     setTempoTotal(0);
     setProgresso(0);
     handleAwayGoal(true, 0)
     handleHomeGoal(true, 0)
+    sendNotification(true)
   }
 
   function golCasa() {
@@ -67,7 +70,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
       setLastGoal('home')
     }
   }
-
+  
   function golVisitante() {
     if(cronometroAtivo){
       handleAwayGoal(false, 1)
@@ -79,7 +82,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
     if(lastGoal == 'away') handleAwayGoal(false, -1)
     else handleHomeGoal(false, -1)
   }
-
+  
   const iniciarCronometro = () => {
     if (tempoLimite > 0) {
       setCronometroAtivo(true);
@@ -91,24 +94,65 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
       setTempoLimite(tempoLimite + 1);
     }
   }
-
+  
   useEffect(() => {
     const interval = setInterval(() => {
       if (cronometroAtivo && tempoTotal < segundosLimite) {
         setTempoTotal(tempoTotal + 1);
         setProgresso((tempoTotal / segundosLimite) * 100);
       }
-
+      
       if (tempoTotal >= segundosLimite) {
         setCronometroAtivo(false);
       }
     }, 1000);
-
+    
+    
     return () => clearInterval(interval);
   }, [tempoTotal, segundosLimite, cronometroAtivo]);
-
+  
   const minutosRestantes = Math.floor((segundosLimite - tempoTotal) / 60);
   const segundosRestantes = (segundosLimite - tempoTotal) % 60;
+
+  async function callNotification(){
+    if (minutosRestantes === 0 && segundosRestantes === 0) {
+      if (Notification.permission === 'granted') {
+        const notificationOptions = {
+          body: `A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`,
+          icon: "/caminho-para-o-ícone-da-notificação.png",
+        };
+    
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.ready.then(function (registration) {
+            registration.showNotification(`A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`, notificationOptions);
+          });
+        }
+      } else if (Notification.permission !== 'denied') {
+        
+        const permission = await Notification.requestPermission();
+    
+        if (permission === 'granted') {
+          
+          const notificationOptions = {
+            body: `A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`,
+            icon: "/caminho-para-o-ícone-da-notificação.png",
+          };
+    
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(function (registration) {
+              registration.showNotification(`A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`, notificationOptions);
+            });
+          }
+        }
+      }
+    }
+    sendNotification(false)
+  }
+  
+  if (minutosRestantes === 0 && segundosRestantes === 0 && notification == true) {
+    callNotification()
+  }
+  
 
   return (
     <div className=" text-2xl w-full">
