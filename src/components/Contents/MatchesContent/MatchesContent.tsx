@@ -206,7 +206,7 @@ export default function MatchesContent() {
             <div className="flex flex-col w-full rounded-lg overflow-hidden ">
                 <div className="bg-white flex justify-between items-center p-5 border border-b-black">
                     <div className="font-semibold ">
-                        Historico de jogos
+                        Partidas
                     </div>
                     <div onClick={handleOpenModal} className="bg-green-400 text-white rounded-full p-2 hover:bg-green-600 cursor-pointer">
                         <PlusIcon />
