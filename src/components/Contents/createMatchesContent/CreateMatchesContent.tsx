@@ -36,6 +36,17 @@ export default function CreateMatchesContent() {
         setAwayGoal(awayGoal + value)
     }
 
+    if ('Notification' in window) {
+        if (Notification.permission !== 'granted') {
+          Notification.requestPermission().then(function (permission) {
+            if (permission === 'granted') {
+              // O usuário concedeu permissão para notificações.
+              // Você pode agora mostrar notificações quando necessário.
+            }
+          });
+        }
+      }
+
     return (
         <div className="bg-zinc-200 w-full h-screen screenCalc flex p-3 text-sm md:text-xl">
             <div className="flex flex-col w-full rounded-lg overflow-hidden ">
