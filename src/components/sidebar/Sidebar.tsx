@@ -20,7 +20,7 @@ export default function Sidebar() {
                         className={` md:text-white md:bg-green-300 md:border-none  hover:bg-green-400 cursor-pointer flex w-full items-center md:p-3 md:rounded-2xl justify-between
                         ${currentPath.includes('/matches') ? "border-b-2 border-green-600 text-green-500 md:bg-green-600" : "text-zinc-400"}
                         `}>
-                        <span className="font-black text-xl ">Partidas</span>
+                        <span className="font-black text-md lg:text-xl ">Partidas</span>
                         <SoccerBall className="w-10 h-10"/>
                     </NavLink>
                     <NavLink 
@@ -28,7 +28,7 @@ export default function Sidebar() {
                         className={` md:text-white md:bg-green-300 md:border-none  hover:bg-green-400 cursor-pointer flex w-full items-center md:p-3 md:rounded-2xl justify-between
                         ${currentPath.includes('/team') ? "border-b-2 border-green-600 text-green-500 md:bg-green-600" : "text-zinc-400"}
                         `}>
-                        <span className="font-black text-xl ">Times</span>
+                        <span className="font-black text-md lg:text-xl ">Times</span>
                         <TShirt className="w-10 h-10 "/>
                     </NavLink>
                 </div>

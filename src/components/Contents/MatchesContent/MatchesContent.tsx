@@ -268,7 +268,7 @@ export default function MatchesContent() {
                 </div>
                 <div className="bg-zinc-200 h-full p-5 flex flex-col gap-5 overflow-y-auto">
                     {partidas.map((partida, index) => (
-                        <div key={index} className="bg-white h-56 rounded-lg cursor-pointer hover:bg-green-300 flex flex-col justify-between items-center text-zinc-700 hover:text-white">
+                        <div key={index} className="bg-white rounded-lg cursor-pointer hover:bg-green-300 flex flex-col justify-between items-center text-zinc-700 hover:text-white">
                             <div className="border-b w-full flex justify-between items-center">
                                 <div className="flex gap-3 px-2">
                                     <span>
