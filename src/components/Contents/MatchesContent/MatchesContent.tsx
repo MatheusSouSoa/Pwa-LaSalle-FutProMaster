@@ -195,7 +195,22 @@ export default function MatchesContent() {
             match(partida)
             navigate("/matches/create-match");
         } else {
-            console.error("Time não encontrado");
+            const partida = {
+                data: new Date(),
+                minutos: minutos,
+                timeA: {
+                    nome: "Mandante",
+                    gols: 0,
+                    players: []
+                },
+                timeB: {
+                    nome: "Visitante",
+                    gols: 0,
+                    players: []
+                }
+            }
+            match(partida)
+            navigate("/matches/create-match");
         }
     }
 

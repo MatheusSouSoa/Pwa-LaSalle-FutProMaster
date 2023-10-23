@@ -76,8 +76,9 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
             return
         }
 
-        if (playerFormData.camisa <= 0 ) {
-            setErrMsg('Número de camisa invalido')
+        const alreadyUsed = players.filter(p => p.camisa === playerFormData.camisa)
+        if (playerFormData.camisa && playerFormData.camisa <= 0 || alreadyUsed.length > 0) {
+            setErrMsg('Número de camisa invalido ou já usado')
             setIsErr(true)
             return
         }
@@ -104,10 +105,18 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
     
-        setPlayerFormData({
-          ...playerFormData,
-          [name]: value
-        });
+        if(name.toLocaleLowerCase() === "camisa"){
+            setPlayerFormData({
+                ...playerFormData,
+                [name]: parseInt(value, 10)
+            })
+        }
+        else{
+            setPlayerFormData({
+              ...playerFormData,
+              [name]: value
+            });
+        }
     };
 
     function handleIsModalClose(){

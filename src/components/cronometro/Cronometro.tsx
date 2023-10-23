@@ -1,6 +1,6 @@
 import { ClockClockwise, SoccerBall } from '@phosphor-icons/react';
 import { Clock, Flag, Pause, Play, XCircle } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useMatchesStore } from '../../stores/matchesStore';
 import { useNavigate } from 'react-router-dom';
 import { useUsersStore } from '../../stores/userStore';
@@ -86,6 +86,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
   const iniciarCronometro = () => {
     if (tempoLimite > 0) {
       setCronometroAtivo(true);
+      playAudio()
     }
   }
 
@@ -119,7 +120,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
     if (minutosRestantes === 0 && segundosRestantes === 0) {
       if (Notification.permission === 'granted') {
         const notificationOptions = {
-          body: `A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`,
+          body: `${partida?.timeA.nome} ${homeGols} X ${awayGols} ${partida?.timeB.nome}`,
           icon: "/whistle.svg",
         };
 
@@ -151,14 +152,32 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
       navigator.vibrate([200, 100, 200, 100, 200]);
     }
   }
+  const audioElement = useRef<HTMLAudioElement | null>(null);
+  
+  const playAudio = () => {
+    if (audioElement.current) {
+      audioElement.current.play();
+    }
+  }
+
+  // const stopAudio = () => {
+  //   if (audioElement.current) {
+  //     audioElement.current.pause();
+  //     audioElement.current.currentTime = 0;
+  //   }
+  // }
 
   if (minutosRestantes === 0 && segundosRestantes === 0 && notification == true) {
     callNotification();
+    playAudio()
   }
+
+
   
 
   return (
     <div className=" text-2xl w-full">
+      <audio ref={audioElement} src='/apito.mp3' preload='auto'/>
       <div className="relative">
         <div className="flex mb-2 items-center justify-between">
           <div>
