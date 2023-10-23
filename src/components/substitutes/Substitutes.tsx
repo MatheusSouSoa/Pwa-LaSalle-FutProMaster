@@ -1,5 +1,7 @@
 import { PlusIcon, Trash2, User2, UserPlus, X } from "lucide-react"
 import { useState } from "react"
+import { usePlayersStore } from "../../stores/playersStore"
+import Modal from "../../utils/modal/Modal"
 
 // interface SubstituesProps {
 //     reservas: any[]
@@ -22,6 +24,8 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
 
     const POSICOES = ['gol','def', 'mc','ata']
 
+    const [errMsg, setErrMsg] = useState("")
+    const [isErr, setIsErr] = useState(false)
     const [playersNumber, setPlayersNumber] = useState(0)
     const [isVisible, setIsVisible] = useState(false);
     const [reservas, setReservas] = useState<PlayerProps[] | undefined>()
@@ -32,6 +36,9 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
         camisa: 0,
         situacao: 'Reserva'
     })
+    const handleAddPlayersStore = usePlayersStore(state => state.addPlayer)
+    const players = usePlayersStore(state => state.players)
+    const handleRemovePlayersStore = usePlayersStore(state => state.removePlayer)
 
     const toggleVisibility = () => {
         if(reservas && maxPlayers && reservas?.length >= maxPlayers) return 
@@ -44,26 +51,36 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
     };
 
     function removePlayer (index: number ) {
+        const player = players[index];
 
-        if(reservas)
+        if(reservas && player){
             setReservas(reservas.slice(0, index)
             .concat(reservas.slice(index + 1)));
+            handleRemovePlayersStore(player.camisa)
+        }
     }
     
 
     function handleAddPlayer() {
-
-        if(reservas && maxPlayers && reservas?.length >= maxPlayers) 
-            return console.log("O numero de jogadores maximo para posição foi atingido.")
+        
+        if(reservas && maxPlayers && reservas?.length >= maxPlayers) {
+            setErrMsg("O numero de jogadores maximo para posição foi atingido.")
+            setIsErr(true)
+            return 
+        }
 
         if (playerFormData.nome === '') {
-            console.log('Nome não pode estar em branco');
-            return;
+            setErrMsg('Nome não pode estar em branco')
+            setIsErr(true)
+            return
         }
-        if (playerFormData.camisa === 0) {
-            console.log('Camisa não pode estar em branco ou 0');
-            return;
+
+        if (playerFormData.camisa <= 0 ) {
+            setErrMsg('Número de camisa invalido')
+            setIsErr(true)
+            return
         }
+
         
         setReservas((prevPlayers) => {
         if (prevPlayers) {
@@ -72,6 +89,7 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
             return [playerFormData];
         }
         });
+        handleAddPlayersStore(playerFormData)
     
         setPlayerFormData({
         ...playerFormData,
@@ -91,6 +109,10 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
           [name]: value
         });
     };
+
+    function handleIsModalClose(){
+        setIsErr(false)
+    }
 
     return (
         <div className="p-2 select-none relative bg-green-500 text-white font-semibold border border-white flex gap-6 overflow-x-auto">
@@ -188,6 +210,22 @@ export default function Substitutes({maxPlayers} : SubstitutesProps) {
                     Add Player
                 </div>
             </div>
+            {isErr &&
+                <Modal isOpen={true} onClose={handleIsModalClose}>
+                    <div>
+                        <div className="flex flex-col justify-between items-center gap-5">
+                            <div>
+                                <h1 className="text-red-500 font-bold">
+                                    {errMsg}
+                                </h1>
+                            </div>
+                            <span>
+                                <button onClick={handleIsModalClose} className="bg-red-500 rounded-md text-white font-black hover:bg-red-600 px-6 py-2">ok</button>
+                            </span>
+                        </div>
+                    </div>
+                </Modal>
+            }
         </div>
     )
 }

@@ -1,6 +1,7 @@
-import { Trash2, User2, UserPlus } from "lucide-react"
+import { Trash2, User2, UserPlus} from "lucide-react"
 import { useState } from "react"
 import { usePlayersStore } from "../../stores/playersStore"
+import Modal from "../../utils/modal/Modal"
 
 interface SectorPLayersProps{
     maxPlayers?: number
@@ -58,18 +59,27 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
     const handleAddPlayersStore = usePlayersStore(state => state.addPlayer)
     const players = usePlayersStore(state => state.players)
 
+    const [errMsg, setErrMsg] = useState("")
+    const [isErr, setIsErr] = useState(false)
+
     function handleAddPlayer() {
 
-        if(playerOfPosition && maxPlayers && playerOfPosition?.length >= maxPlayers) 
-            return console.log("O numero de jogadores maximo para posição foi atingido.")
+        if(playerOfPosition && maxPlayers && playerOfPosition?.length >= maxPlayers) {
+            setErrMsg("O numero de jogadores maximo para posição foi atingido.")
+            setIsErr(true)
+            return 
+        }
 
         if (playerFormData.nome === '') {
-            console.log('Nome não pode estar em branco');
-            return;
+            setErrMsg('Nome não pode estar em branco')
+            setIsErr(true)
+            return
         }
-        if (playerFormData.camisa === 0) {
-            console.log('Camisa não pode estar em branco ou 0');
-            return;
+
+        if (playerFormData.camisa <= 0 ) {
+            setErrMsg('Número de camisa invalido')
+            setIsErr(true)
+            return
         }
     
         setPlayersOfPosition((prevPlayers) => {
@@ -100,8 +110,34 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
         });
     };
 
+    function handleIsModalClose(){
+        setIsErr(false)
+    }
+
+    // if(isErr) {
+    //     return (
+            
+    //     )
+    // }
+
     return (
         <div className="flex flex-col w-1/4 h-full text-xs md:text-lg select-none">
+            {isErr &&
+                <Modal isOpen={true} onClose={handleIsModalClose}>
+                    <div>
+                        <div className="flex flex-col justify-between items-center gap-5">
+                            <div>
+                                <h1 className="text-red-500 font-bold">
+                                    {errMsg}
+                                </h1>
+                            </div>
+                            <span>
+                                <button onClick={handleIsModalClose} className="bg-red-500 rounded-md text-white font-black hover:bg-red-600 px-6 py-2">ok</button>
+                            </span>
+                        </div>
+                    </div>
+                </Modal>
+            }
             <div className="flex justify-around items-center p-3 bg-green-400 font-bold text-white ">
                 <span className=" whitespace-nowrap">
                     {sectorName}

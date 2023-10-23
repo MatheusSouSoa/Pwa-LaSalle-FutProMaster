@@ -60,7 +60,7 @@ export default function CreateMatchesContent() {
                                     </div>
                                     <div className="flex gap-3 px-2">
                                         <span>Duração da partida:</span>
-                                        <span>{partida && partida.minutos}</span>
+                                        <span>{partida && partida.minutos} min</span>
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center w-full flex-1 ">
