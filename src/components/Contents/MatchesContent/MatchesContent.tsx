@@ -159,6 +159,16 @@ export default function MatchesContent() {
                 });   
             }
         }
+        if ('Notification' in window) {
+            if (Notification.permission !== 'granted') {
+              Notification.requestPermission().then(function (permission) {
+                if (permission === 'granted') {
+                  // O usuário concedeu permissão para notificações.
+                  // Você pode agora mostrar notificações quando necessário.
+                }
+              });
+            }
+          }
         fetchTeams()
     }, [])
  
