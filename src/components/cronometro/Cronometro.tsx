@@ -25,6 +25,8 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
   const [lastGoal, setLastGoal] = useState<string | undefined>()
   const [notification, sendNotification] = useState(true)
 
+  let wakeLock: WakeLockSentinel | null = null;
+
   const navigate = useNavigate()
 
 
@@ -62,6 +64,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
     handleAwayGoal(true, 0)
     handleHomeGoal(true, 0)
     sendNotification(true)
+    releaseWakeLock()
   }
 
   function golCasa() {
@@ -83,12 +86,31 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
     else handleHomeGoal(false, -1)
   }
   
-  const iniciarCronometro = () => {
+  const iniciarCronometro = async () => {
     if (tempoLimite > 0) {
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+    
+        wakeLock.addEventListener('release', () => {
+          console.log('Wake Lock was released');
+        });
+        console.log('Wake Lock is active');
+      }
+      catch(err) {
+        console.error(`${err}, ${err}`);
+      }
       setCronometroAtivo(true);
       playAudio()
     }
   }
+
+  const releaseWakeLock = () => {
+    console.log('releasing wakeLock');
+  
+    if(wakeLock)
+    wakeLock.release();
+    wakeLock = null;
+  };
 
   const adicionarMinuto = () => {
     if (!cronometroAtivo) {
@@ -147,6 +169,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
       }
     }
     sendNotification(false);
+    releaseWakeLock()
 
     if ('vibrate' in navigator) {
       navigator.vibrate([200, 100, 200, 100, 200]);
@@ -170,6 +193,7 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
   if (minutosRestantes === 0 && segundosRestantes === 0 && notification == true) {
     callNotification();
     playAudio()
+    releaseWakeLock()
   }
 
 
