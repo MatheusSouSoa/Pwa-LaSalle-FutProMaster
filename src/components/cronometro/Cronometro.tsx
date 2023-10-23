@@ -2,14 +2,19 @@ import { ClockClockwise, SoccerBall } from '@phosphor-icons/react';
 import { Clock, Flag, Pause, Play, XCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useMatchesStore } from '../../stores/matchesStore';
+import { useNavigate } from 'react-router-dom';
+import { useUsersStore } from '../../stores/userStore';
+import { registerMatch } from '../../services/RegisterMatch';
 
 interface CronometroProps {
+    homeGols: number
+    awayGols: number
     redirecionar: () => void
     handleHomeGoal: (reset: boolean, value: number) => void
     handleAwayGoal: (reset: boolean, value: number) => void
 }
 
-function Cronometro({ redirecionar, handleAwayGoal, handleHomeGoal}: CronometroProps) {
+function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: CronometroProps) {
   
   const partida = useMatchesStore(state => state.matche)
   const [tempoTotal, setTempoTotal] = useState(0);
@@ -19,9 +24,33 @@ function Cronometro({ redirecionar, handleAwayGoal, handleHomeGoal}: CronometroP
   const segundosLimite = tempoLimite! * 60 || 0;
   const [lastGoal, setLastGoal] = useState<string | undefined>()
 
+  const navigate = useNavigate()
+
 
   const alternarCronometro = () => {
     setCronometroAtivo(!cronometroAtivo);
+  }
+
+  const user = useUsersStore(state => state.user)
+
+  function salvarPartida() {
+    if(minutosRestantes > 0 && segundosRestantes > 0) {
+      return console.log("Partida ainda n terminou.")
+    }
+
+    if(user && partida?.minutos && partida.timeA && partida.timeB){
+      registerMatch(user?.uid, {
+        data: new Date(),
+        minutos: partida?.minutos,
+        home: {...partida?.timeA, gols: homeGols},
+        away: {...partida?.timeB, gols: awayGols}
+      })
+      navigate("/matches")
+    }
+    else{
+      return false
+    }
+
   }
 
   const reiniciarCronometro = () => {
@@ -138,7 +167,7 @@ function Cronometro({ redirecionar, handleAwayGoal, handleHomeGoal}: CronometroP
                 </>
             )
         }
-          <div className="flex flex-col justify-center items-center text-red-500 bg border hover:text-white hover:bg-red-500 px-4 py-2 rounded-md text-sm cursor-pointer" onClick={redirecionar} title='Finalizar partida'>
+          <div className="flex flex-col justify-center items-center text-red-500 bg border hover:text-white hover:bg-red-500 px-4 py-2 rounded-md text-sm cursor-pointer" onClick={salvarPartida} title='Finalizar partida'>
               <Flag className="fill-white "/>
           </div>
       </div>

@@ -14,7 +14,6 @@ export default function CreateTeamInfo() {
     const resetPlayers = usePlayersStore(state => state.resetPlayers)
 
     function registerTeamOnDB() {
-        console.log(user)
         if(user && players.length > 0)
         registerTeam(user?.uid, {
             nome: teamName,

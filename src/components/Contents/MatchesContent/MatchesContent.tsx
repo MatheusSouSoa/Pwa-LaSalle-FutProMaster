@@ -7,19 +7,7 @@ import { useMatches } from "../../../hooks/matchesProvider/MatchesProvider";
 import { getTeams } from "../../../services/RegisterTeam";
 import { useUsersStore } from "../../../stores/userStore";
 import { useMatchesStore } from "../../../stores/matchesStore";
-
-interface PartidaProps {
-    data: Date,
-    minutos: number,
-    timeA: {
-        nome: string,
-        placar: number
-    },
-    timeB: {
-        nome: string,
-        placar: number
-    }
-}
+import { getMatchs } from "../../../services/RegisterMatch";
 
 interface PlayerProps {
     nome: string
@@ -30,9 +18,16 @@ interface PlayerProps {
 
 interface TimeProps {
     nome: string,
+    gols: number,
     players: PlayerProps[]
 }
 
+interface MatchProps {
+    data: Date,
+    minutos: number,
+    home: TimeProps,
+    away: TimeProps
+}
 
 
 export default function MatchesContent() {
@@ -56,80 +51,80 @@ export default function MatchesContent() {
     //     // Você pode adicionar mais times aqui
     // ];
 
-    const partidas:PartidaProps[] = [
-        {
-            data: new Date(Date.now()),
-            minutos: 15,
-            timeA: {
-                nome: "Flamengo",
-                placar: 3
-            },
-            timeB: {
-                nome: "Palmeiras",
-                placar: 1
-            }
-        },
-        {
-            data: new Date(Date.now()),
-            minutos: 15,
-            timeA: {
-                nome: "Time A",
-                placar: 3
-            },
-            timeB: {
-                nome: "Time B",
-                placar: 1
-            }
-        },
-        {
-            data: new Date(Date.now()),
-            minutos: 15,
-            timeA: {
-                nome: "Time A",
-                placar: 3
-            },
-            timeB: {
-                nome: "Time B",
-                placar: 1
-            }
-        },
-        {
-            data: new Date(Date.now()),
-            minutos: 15,
-            timeA: {
-                nome: "Time A",
-                placar: 3
-            },
-            timeB: {
-                nome: "Time B",
-                placar: 1
-            }
-        },
-        {
-            data: new Date(Date.now()),
-            minutos: 15,
-            timeA: {
-                nome: "Time A",
-                placar: 3
-            },
-            timeB: {
-                nome: "Time B",
-                placar: 1
-            }
-        },
-        {
-            data: new Date(Date.now()),
-            minutos: 15,
-            timeA: {
-                nome: "Time A",
-                placar: 3
-            },
-            timeB: {
-                nome: "Time B",
-                placar: 1
-            }
-        },
-    ]
+    // const partidas:PartidaProps[] = [
+    //     {
+    //         data: new Date(Date.now()),
+    //         minutos: 15,
+    //         timeA: {
+    //             nome: "Flamengo",
+    //             placar: 3
+    //         },
+    //         timeB: {
+    //             nome: "Palmeiras",
+    //             placar: 1
+    //         }
+    //     },
+    //     {
+    //         data: new Date(Date.now()),
+    //         minutos: 15,
+    //         timeA: {
+    //             nome: "Time A",
+    //             placar: 3
+    //         },
+    //         timeB: {
+    //             nome: "Time B",
+    //             placar: 1
+    //         }
+    //     },
+    //     {
+    //         data: new Date(Date.now()),
+    //         minutos: 15,
+    //         timeA: {
+    //             nome: "Time A",
+    //             placar: 3
+    //         },
+    //         timeB: {
+    //             nome: "Time B",
+    //             placar: 1
+    //         }
+    //     },
+    //     {
+    //         data: new Date(Date.now()),
+    //         minutos: 15,
+    //         timeA: {
+    //             nome: "Time A",
+    //             placar: 3
+    //         },
+    //         timeB: {
+    //             nome: "Time B",
+    //             placar: 1
+    //         }
+    //     },
+    //     {
+    //         data: new Date(Date.now()),
+    //         minutos: 15,
+    //         timeA: {
+    //             nome: "Time A",
+    //             placar: 3
+    //         },
+    //         timeB: {
+    //             nome: "Time B",
+    //             placar: 1
+    //         }
+    //     },
+    //     {
+    //         data: new Date(Date.now()),
+    //         minutos: 15,
+    //         timeA: {
+    //             nome: "Time A",
+    //             placar: 3
+    //         },
+    //         timeB: {
+    //             nome: "Time B",
+    //             placar: 1
+    //         }
+    //     },
+    // ]
 
     const navigate = useNavigate();
     const {handleMinutes} = useMatches()
@@ -137,15 +132,23 @@ export default function MatchesContent() {
     const [timeB, setTimeB] = useState<string>("Selecione um time")
     const [times, setTimes] = useState<string[]>([])
     const[timeObj, setTimeObj] = useState<TimeProps[]>([])
-    const [ minutos, setMinutos] = useState(0)
+    const [ minutos, setMinutos] = useState(10)
     const match = useMatchesStore(state => state.adicionarTimes)
+    const [partidas, setPartidas] = useState<MatchProps[]>([])
 
-    
+        
+
     const user = useUsersStore(state => state.user)
 
     useEffect(() =>{
         async function fetchTeams () {
             if(user){
+                getMatchs(user.uid).then((data: []) => {
+                    if(data){
+                        setPartidas(Object.values(data))
+                    }
+                })
+
                 getTeams(user.uid).then((data: []) => {
                     if (data) {
                         setTimeObj(Object.values(data))
@@ -173,8 +176,6 @@ export default function MatchesContent() {
         }
         
         if (teamA && teamB) {
-            // handleTeamA(teamA);
-            // handleTeamB(teamB);
             const partida = {
                 minutos: minutos,
                 timeA: teamA,
@@ -251,7 +252,7 @@ export default function MatchesContent() {
                                         type="number" 
                                         placeholder="minutos a serem jogados" 
                                         required
-                                        className=" outline-none border-1 bg-zinc-100 px-2 rounded-md w-12 border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
+                                        className=" outline-none border-1 bg-zinc-100 px-2 rounded-md w-24 border hover:bg-zinc-200 focus:bg-zinc-200 text-zinc-600"
                                         value={minutos}
                                         onChange={(event) => setMinutos(parseInt(event.target.value))}
                                     />
@@ -274,29 +275,29 @@ export default function MatchesContent() {
                                         Data:
                                     </span>
                                     <span>
-                                        {format(partida.data, "dd/MM/yyyy HH:mm:ss")}
+                                        {format(new Date(partida.data), "dd/MM/yyyy HH:mm:ss")}
                                     </span>
                                 </div>
                                 <div className="flex gap-3 px-2">
                                     <span>Minutos jogados:</span>
-                                    <span>{minutos}</span>
+                                    <span>{partida.minutos}</span>
                                 </div>
                             </div>
                             <div className="w-full flex justify-between items-center p-2 text-xl sm:text-2xl md:text-4xl lg:text-5xl ">
                                 <div className=" flex-1">
-                                    {partida.timeA.nome}
+                                    {partida.home.nome}
                                 </div>
                                 <div className="">
-                                    {partida.timeA.placar}
+                                    {partida.home.gols}
                                 </div>
                                 <div className=" font-black ">
                                     X
                                 </div>
                                 <div className=" ">
-                                    {partida.timeB.placar}
+                                    {partida.away.gols}
                                 </div>
                                 <div className=" font-semibold flex-1 text-end">
-                                    {partida.timeB.nome}
+                                    {partida.away.nome}
                                 </div>
                             </div>
                         </div>

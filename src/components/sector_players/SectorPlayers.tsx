@@ -51,7 +51,8 @@ export default function SectorPlayers({ maxPlayers ,sectorName, isEven}: SectorP
             setPlayersOfPosition(playerOfPosition.slice(0, index)
             .concat(playerOfPosition.slice(index + 1)));
         else return
-        handleRemovePlayersStore(player.camisa)
+        if(player)
+            handleRemovePlayersStore(player.camisa)
     }
     
     const handleAddPlayersStore = usePlayersStore(state => state.addPlayer)

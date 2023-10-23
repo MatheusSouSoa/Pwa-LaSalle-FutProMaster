@@ -45,7 +45,7 @@ export default function CreateMatchesContent() {
                     </div>
                 </div>
                 <div className="bg-white h-full p-2 flex flex-col gap-5 justify-center items-center w-full overflow-y-auto">
-                    <Cronometro redirecionar={redirecionarParaOutraPagina} handleAwayGoal={handleAwayGoal} handleHomeGoal={handleHomeGoal}/>
+                    <Cronometro awayGols={awayGoal} homeGols={homeGoal} redirecionar={redirecionarParaOutraPagina} handleAwayGoal={handleAwayGoal} handleHomeGoal={handleHomeGoal}/>
                     <div className="w-full h-full">
                         {
                             <div className="bg-white border rounded-lg  flex flex-col justify-between items-center h-full">

@@ -17,9 +17,9 @@ export default function MenuUser() {
 
     return (    
         <div className="justify-center items-center gap-3 flex">
-            <div className="font-bold text-white text-xs sm:text-xl md:text-2xl flex text-right justify-center flex-col">
+            <div className="font-bold text-white text-xs sm:text-xl md:text-2xl flex text-right justify-center items-end flex-col">
                 <span>{user?.name}</span>
-                <button className="flex justify-end items-center text-xs sm:text-lg md:text-xl hover:underline" onClick={handleLogout}>Sair</button>
+                <button className="flex hover:text-red-500 justify-end items-center text-xs sm:text-lg md:text-xl hover:underline" onClick={handleLogout}>Sair</button>
             </div>
             <div className=" bg-red-400 rounded-full w-10 md:w-16 flex justify-center items-center overflow-hidden">
                 {user?.profilePicture ? <img src={user.profilePicture} alt="" /> : <User className="w-6 h-5 "/>}
