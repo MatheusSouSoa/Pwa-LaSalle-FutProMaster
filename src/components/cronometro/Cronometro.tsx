@@ -114,30 +114,29 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
   const minutosRestantes = Math.floor((segundosLimite - tempoTotal) / 60);
   const segundosRestantes = (segundosLimite - tempoTotal) % 60;
 
-  async function callNotification(){
+  
+  async function callNotification() {
     if (minutosRestantes === 0 && segundosRestantes === 0) {
       if (Notification.permission === 'granted') {
         const notificationOptions = {
           body: `A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`,
-          icon: "/caminho-para-o-ícone-da-notificação.png",
+          icon: "/whistle.svg",
         };
-    
+
         if ('serviceWorker' in navigator) {
           navigator.serviceWorker.ready.then(function (registration) {
             registration.showNotification(`A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`, notificationOptions);
           });
         }
       } else if (Notification.permission !== 'denied') {
-        
         const permission = await Notification.requestPermission();
-    
+
         if (permission === 'granted') {
-          
           const notificationOptions = {
             body: `A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`,
-            icon: "/caminho-para-o-ícone-da-notificação.png",
+            icon: "/whistle.svg",
           };
-    
+
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.ready.then(function (registration) {
               registration.showNotification(`A partida entre ${partida?.timeA.nome} e ${partida?.timeB.nome} chegou ao fim!`, notificationOptions);
@@ -146,11 +145,15 @@ function Cronometro({homeGols, awayGols, handleAwayGoal, handleHomeGoal}: Cronom
         }
       }
     }
-    sendNotification(false)
+    sendNotification(false);
+
+    if ('vibrate' in navigator) {
+      navigator.vibrate([200, 100, 200, 100, 200]);
+    }
   }
-  
+
   if (minutosRestantes === 0 && segundosRestantes === 0 && notification == true) {
-    callNotification()
+    callNotification();
   }
   
 
